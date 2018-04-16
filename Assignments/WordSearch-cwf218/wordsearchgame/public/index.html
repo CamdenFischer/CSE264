@@ -1,0 +1,33 @@
+<!--
+    Camden Fischer
+    CSE 264: Web Apps
+    Word Search
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/styles.css" />  
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+        
+        <title>Word Search</title>
+    </head>
+    <body>
+        <div class="col-md-4">
+            <form>
+                User Name: <input type="text" name="username" id="username"/>
+                <input type="button" value="Login" id="login"/>
+            </form>
+        </div>
+        <div id="puzzlediv">
+            <label id="puzzlelabel"></label>
+            <table></table>
+            <button id="submit">Submit</button>
+        </div>  
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

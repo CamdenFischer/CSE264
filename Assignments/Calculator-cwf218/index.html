@@ -1,0 +1,54 @@
+<!--
+    Camden Fischer
+    cwf218
+    CSE 264 - Web Apps
+    HW 2 - Calculator
+-->
+
+<!doctype html>
+<html>
+    <head>
+        <title>HW 2</title>
+        <link rel="stylesheet" type="text/css" href="styles.css"></link>
+        <body>     
+            <div class="calculator">                       
+                
+                <form>
+                    <input type="text" value="0" readonly="readonly" id="display"></input>
+                </form>
+                
+                <div class="keyboard">
+                    <div class="buttonrow1">
+                        <button class="column1" onclick="clickSignSwitch()">+/-</button>
+                        <button class="column1" onclick="clickC()">C</button>
+                        <button class="column3" onclick="clickDecimal()">.</button>
+                        <button class="column4" onclick="clickDivide()">/</button>
+                    </div>
+                    <div class="buttonrow2">
+                        <button class="column1" id="number" onclick="clickSeven()">7</button>
+                        <button class="column2" id="number" onclick="clickEight()">8</button>
+                        <button class="column3" id="number" onclick="clickNine()">9</button>
+                        <button class="column4" onclick="clickMultiply()">*</button>
+                    </div>
+                    <div class="buttonrow3">
+                        <button class="column1" id="number" onclick="clickFour()">4</button>
+                        <button class="column2" id="number" onclick="clickFive()">5</button>
+                        <button class="column3" id="number" onclick="clickSix()">6</button>
+                        <button class="column4" onclick="clickSubtract()">-</button>
+                    </div>
+                    <div class="buttonrow4">
+                        <button class="column1" id="number" onclick="clickOne()">1</button>
+                        <button class="column2" id="number" onclick="clickTwo()">2</button>
+                        <button class="column3" id="number" onclick="clickThree()">3</button>
+                        <button class="column4" onclick="clickAdd()">+</button>
+                    </div>
+                    <div class="buttonrow5">
+                        <button class="column2" onclick="clickPush()">Push</button>
+                    </div>
+                </div>   
+            </div>
+            
+            <script src="script.js"></script>
+        </body>
+    </head>
+</html>

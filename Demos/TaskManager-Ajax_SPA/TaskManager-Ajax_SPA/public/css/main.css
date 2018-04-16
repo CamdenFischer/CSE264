@@ -1,0 +1,11 @@
+table, tr, td, th {
+  border: 2px solid black;
+}
+
+table {
+  margin-right: 5px;
+}
+
+button {
+  border: 1px solid green;  
+}

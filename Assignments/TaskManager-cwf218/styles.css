@@ -1,0 +1,31 @@
+table {
+    float: left;
+    border: 1px solid black;
+    
+}
+
+th, td {
+    border: 1px solid black;
+}
+
+form {
+    float: right;
+    left: 50%;
+}
+
+#formblock{ 
+float: right;
+margin: 20px;
+}
+
+#tableblock {
+}
+
+#submit {
+    float: right;
+}
+
+input {
+    font-style: oblique;
+    margin: 5px;
+}

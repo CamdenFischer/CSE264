@@ -1,0 +1,36 @@
+#container{
+    width: 800px;
+}
+
+#banner {
+    background-color: rgba(80,45,14,0.9);
+    height: 80px;
+    font-size: 26px;
+}
+
+#logo {
+    vertical-align: middle;
+    padding-top: 10px;
+    padding-left: 8px;
+}
+
+#column1 {
+    width: 66%;
+    float: left;
+    display: block;
+}
+
+#column2 {
+    width: 33%;
+    float: right;
+    display: block;
+}
+
+#footer {
+    width: 100%;
+    background-color: blue;
+    position: absolute;
+    bottom: 0;
+    color: white;
+    font-weight: bold;
+}

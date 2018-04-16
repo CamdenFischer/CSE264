@@ -1,0 +1,35 @@
+/*
+    Camden Fischer
+    Web Apps
+    Poetry
+*/
+
+#movable {
+    position: absolute;
+}
+
+#movableheader {
+    position: absolute;
+}
+
+body {
+    background-color: black;
+}
+
+button {
+    background-color: black;
+    color: white;
+    border: black;
+}
+
+div { 
+    position: absolute;
+}
+
+img {
+    left: 0px;
+    bottom: 0px;
+    position: absolute;
+    height: 100px;
+    width: 100px;
+}

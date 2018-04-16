@@ -1,0 +1,16 @@
+{
+  "name": "taskmanager-ajax",
+  "version": "1.0.0",
+  "description": "Single Page Application/Ajax Version of the Task Manager",
+  "main": "app.js",
+  "scripts": {
+    "start" : "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "J. Femister",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0"
+  }
+}

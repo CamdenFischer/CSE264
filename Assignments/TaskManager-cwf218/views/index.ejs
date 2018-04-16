@@ -1,0 +1,74 @@
+ 
+
+<!doctype html>
+<html>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function(){
+            $("#date").datepicker();
+        });
+    </script>
+    
+    <head>
+        <title>
+            Task Manager
+        </title>
+        <body>
+            <div id="tableblock">
+                <form method="delete" role="form"> 
+                    <table id="taskManager">
+                        <tr>
+                            <th></th>
+                            <th>Task</th>
+                            <th>Type</th>
+                            <th>Due Date</th>
+                        </tr>
+                        <%entries.forEach(function(entry){ %>
+                        <tr>
+                            <td>
+                                <input type="checkbox">  
+                            </td>
+                            <td>
+                                <%= entry.task %>
+                            </td>
+                            <td>
+                                <%= entry.type %>
+                            </td>
+                            <td>
+                                <%= entry.date %>
+                            </td>
+                        </tr>
+                        <%}) %>
+                    </table>   
+                    <input type="submit" action="/delete" method="post" value="Delete"></input>
+                </form>
+            </div>
+
+            <div id="formblock">
+                <form method="post" role="form">
+                    <input type="submit" value="Add"></input>
+                    <br><br>
+                    <div class="form-group">
+                        <label for="task">Description:</label>
+                        <input type="text" name="task" id="task"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type:</label>
+                        <select name="type" id="type">
+                            <option value="nextAction">Next Action</option>
+                            <option value="waiting">Waiting</option>
+                            <option value="talk">Talk</option>
+                            <option value="future">Future</option>
+                            <option value="someday">Someday/Maybe</option>
+                        </select>
+                    </div>  
+                    <div class="form-group">
+                        <label for="task">Date:</label>
+                        <input type="text" name="date" id="date"><br>
+                    </div>
+                </form>
+            </div>
+        </body>
+    </head>
+</html>

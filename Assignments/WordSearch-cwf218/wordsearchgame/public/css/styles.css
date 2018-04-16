@@ -1,0 +1,14 @@
+table {
+    width: 75%;
+    vertical-align: middle;
+    background-color: black;
+}
+
+td {
+    margin: 5px;
+}
+
+tr {
+    margin: 5px;
+    height: 5px;
+}

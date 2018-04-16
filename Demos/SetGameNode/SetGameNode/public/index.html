@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.23.custom.css" />        
+        <link rel="stylesheet" type="text/css" href="css/styles.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+        <title>Set Game</title>
+    </head>
+    <body>
+        <div id="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h1>Welcome to Set, <span id="lname"></span></h1>
+
+                </div>
+                <div class="col-md-4">
+                    <form>
+                        User Name: <input type="text" name="loginname" id="loginname"/>
+                        <input type="button" value="Login" id="login"/>
+                    </form> 
+
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div id="idlist"></div>
+                    <div id="hand">
+                        <table id="grid">
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div id="rhs">
+                        <fieldset>
+                            <legend>Commands</legend>
+                            <input type="button" id="btnSet" value="Set"/>
+                            <input type="button" id="btnAdd" value="Add Row"/>
+                            <input type="button" id="btnShuffle" value="Shuffle"/>
+                            <input type="button" id="btnEnd" value="End Game"/>
+                        </fieldset>
+                        <div id="userlist">
+                            <table>
+                                <thead>
+                                    <tr><td>Name</td><td>Score</td><td>R</td><td>S</td><td>E</td></tr>
+                                </thead>
+                                <tbody>                        
+                                </tbody>
+                            </table>
+                        </div>
+                        <br>
+                        <div id="chat">
+
+                        </div>
+                        <input type="text" id="chatmsg"/>
+                        <button id="sendchat">Send</button>                         
+                    </div>
+                </div>
+                <div class="col-md-4">
+                </div>
+
+            </div>
+        </div>
+        <script src="js/jquery-1.8.1.min.js"></script>
+        <script src="js/jquery-ui-1.8.23.custom.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>

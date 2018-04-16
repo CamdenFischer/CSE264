@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+  <link href="css/main.css" rel="stylesheet" />
+  <title>Task </title>
+  <style>
+  </style>
+</head>
+
+<body>
+  <form>
+    <h1>Task Manager</h1>
+    <div id="display" style="float: left">
+      <table id="tasktable" style="border: 5px solid black;">
+        <thead>
+          <tr>
+            <th style="width:1em" />
+            <th style="width:15em">Task</th>
+            <th style="width:15em">Type</th>
+            <th style="width:10em">Due Date</th>
+          </tr>
+        </thead>
+        <tbody id="taskrows">
+        </tbody>
+      </table>
+    </div>
+    <div id="modifier" style="float: left">
+      <button type="button" id="add">Add</button>
+      <button type="button" id="delete">Delete</button>
+      <br> Description:
+      <input type="text" id="desc" />
+      <br> Date:
+      <input type="text" id="ddate" /></input>
+      <br> Type:
+      <select id="ttype">
+        <option value="Next Action">Next Action</option>
+        <option value="Waiting For">Waiting For</option>
+        <option value="Talk To">Talk To</option>
+        <option value="Future">Future</option>
+        <option value="Someday/Maybe">Someday/Maybe</option>
+      </select>
+      <br>
+      <br>
+    </div>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" crossorigin="anonymous"></script>
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sample Mobile App</title>
+        <meta charset="UTF-8">
+        <meta name ="viewport" content ="width=device-width, initial-scale=1">
+        <link rel ="stylesheet" href ="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+        <script src ="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src ="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+        <script src ="js/swipe.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("body").bind("swiperight", function(event) {
+                    $("img").attr("src", "images/right.png");
+                });
+                $("body").bind("swipeleft", function(event) {
+                    $("img").attr("src", "images/left.png");
+                });
+                $("body").bind("swipeup", function(event) {
+                    $("img").attr("src", "images/up.png");
+                });
+                $("body").bind("swipedown", function(event) {
+                    $("img").attr("src", "images/down.png");
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div data-role="page">
+            <div data-role="header">
+                <h1>Swipe Demo</h1>
+            </div>
+            <div data-role="content">
+                <img src="images/right.png"/>            
+            </div>
+            <div data-role="footer" data-position="fixed">Copyright 2014</div>
+        </div>
+    </body>
+</html>
