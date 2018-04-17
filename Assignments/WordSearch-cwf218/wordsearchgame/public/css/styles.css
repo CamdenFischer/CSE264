@@ -6,9 +6,18 @@ table {
 
 td {
     margin: 5px;
+    text-align: center;
 }
 
 tr {
     margin: 5px;
     height: 5px;
+}
+
+.selected {
+    background-color: yellow;
+}
+
+.notSelected {
+    background-color: white;
 }

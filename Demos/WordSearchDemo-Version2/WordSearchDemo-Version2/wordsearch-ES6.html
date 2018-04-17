@@ -1,0 +1,335 @@
+<!--
+Word Search Puzzle Creator using OO JavaScript and jQuery
+Author: James A. Femister
+ES6 VERSION
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script>
+    let BLANK = "*"; // The character we will use to represent a blank (unused) cell in the grid
+
+    // Class for creating words placed in the grid
+    class PlacedWord {
+
+      constructor(word, row, col, direction) {
+        this.word = word; // The word itself (String)
+        this.row = row; // The row in the grid of the first letter of the word
+        this.col = col; // The column in the grid of the first letter of the word
+        this.direction = direction; // The direction of the word in the grid (see below)
+        //       5 6 7
+        //       4 + 0
+        //       3 2 1
+      }
+
+    }
+
+    // Class for representing a word search puzzle
+    class Puzzle {
+
+      constructor(order, wlist) {
+        this.order = order; // The number of rows and cols in the grid
+        this.list = wlist; // An Array holding the list of words to be placed in the grid
+        this.matrix = new Array(); // The internal representation of the grid of letters
+        this.placedWords = new Array(); // The list of words that have been placed in the grid.
+        this.grid = null; // A reference to the html grid element
+        // Create the internal matrix to hold the letters and initialize it to blank
+        for (let r = 0; r < this.order; ++r) {
+          this.matrix[r] = new Array();
+          for (let c = 0; c < this.order; ++c) {
+            this.matrix[r][c] = BLANK;
+          }
+        }
+        // Provide an increment/decrement to the row/col for each of the 8 possible directions.
+        //  Direction       0  1  2   3   4   5   6   7
+        this.deltaColumn = [1, 1, 0, -1, -1, -1, 0, 1];
+        this.deltaRow = [0, 1, 1, 1, 0, -1, -1, -1];
+      }
+
+
+      // Returns a list of placedWords that include the given cell
+      findPlacedWords(row, col) {
+        let myPuzzle = this;
+
+        // Returns true if the placedWord includes the given cell, false otherwise
+        function isCellInWord(row, col, placedWord) {
+          let r = placedWord.row;
+          let c = placedWord.col;
+          for (let i = 0; i < placedWord.word.length; ++i) {
+            if (r == row && c == col) {
+              return true;
+            }
+            r += myPuzzle.deltaRow[placedWord.direction];
+            c += myPuzzle.deltaColumn[placedWord.direction];
+          }
+          return false;
+        }
+
+        let lst = new Array();
+        for (let i = 0; i < this.placedWords.length; ++i) {
+          let placedWord = this.placedWords[i];
+          if (isCellInWord(row, col, placedWord)) {
+            lst.push(placedWord);
+          }
+        }
+        return lst;
+      }
+
+  
+    // Takes a list of placedWords and highlights them in the grid
+    highlightWords(lst) {
+      let myPuzzle = this;
+
+      // Highlight a single placedWord
+      function highlightWord(placedWord) {
+        let r = placedWord.row;
+        let c = placedWord.col;
+        for (let i = 0; i < placedWord.word.length; ++i) {
+          // Look up a table cell by its row and col
+          $('tr', myPuzzle.grid).eq(r).find('td').eq(c).css("background-color", "yellow");
+          // Move to the next cell
+          r += myPuzzle.deltaRow[placedWord.direction];
+          c += myPuzzle.deltaColumn[placedWord.direction];
+        }
+      }
+
+      for (let i = 0; i < lst.length; ++i) {
+        highlightWord(lst[i]);
+      }
+    }
+
+
+    // Creates an empty grid and inserts it on the client page.
+    createGrid() {
+      let myPuzzle = this;
+      let grid = "<table>";
+      for (let r = 0; r < this.order; ++r) {
+        grid += "<tr>";
+        for (let c = 0; c < this.order; ++c) {
+          grid += "<td></td>"
+        }
+        grid += "</tr>";
+      }
+      grid += "</table>";
+      $("#placeholder").html(grid);
+
+      // Save a reference to the just created grid
+      this.grid = $("#placeholder > table");
+
+      // Attach an event handler to highlight all words that include 
+      // the cell when it is clicked.
+      $('td', this.grid).click(function () {
+        let r = $(this).closest('tr').index();
+        let c = $(this).closest('td').index();
+        let lst = myPuzzle.findPlacedWords(r, c);
+        myPuzzle.highlightWords(lst);
+      });
+
+    };
+
+    // Creates a word search puzzle of size "order" from the words in the list "list"
+    // Returns true is the puzzle was successfully created, false otherwise
+    createPuzzle() {
+      this.createGrid();
+      for (let i = 0; i < this.list.length; ++i) {
+        let w = this.list[i];
+        if (!this.attemptPlaceWord(w)) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // Inserts the letters into the grid.
+    display() {
+      let rows = $("tr", this.grid);
+      for (let r = 0; r < this.order; ++r) {
+        for (let c = 0; c < this.order; ++c) {
+          let cells = $("td", rows[r]);
+          $(cells[c]).html(this.matrix[r][c]);
+        }
+      }
+    }
+
+    // Fills each unused cell with a random letter from A-Z
+    fillRandom() {
+      for (let r = 0; r < this.order; ++r) {
+        for (let c = 0; c < this.order; ++c) {
+          if (this.matrix[r][c] == BLANK) {
+            this.matrix[r][c] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(Math.random() * 26);
+          }
+        }
+      }
+    };
+
+    // Randomly selects a starting row number from 0 to order-1.
+    pickRow() {
+      return Math.floor(Math.random() * this.order);
+    }
+
+  
+    // Randomly selects a starting column number from 0 to order-1.
+    pickCol() {
+      return Math.floor(Math.random() * this.order);
+    }
+
+    /**
+     * Checks to see if word can be placed in the puzzle starting at the
+     * position row, col and proceeding in direction.
+     *
+     * word - the word to be placed
+     * row - the starting row
+     * col - the starting column
+     * direction - a value from 0-7 indicating the direction to place the
+     *        word.
+     *
+     * return true if the word can be placed; false otherwise.
+     */
+    check(word, row, col, direction) {
+      let r = row;
+      let c = col;
+
+      // Iterate through each letter in the word.
+      for (let i = 0; i < word.length; ++i) {
+
+        // Verify that the word does not run off any of the 4 edges of
+        // the puzzle.
+        if (r < 0 || c < 0 || r >= this.order || c >= this.order) {
+          return false;
+        }
+
+        // Verify that the current letter does not overwrite a letter from
+        // a different word that has already been placed.
+        if (this.matrix[r][c] != word.charAt(i) && this.matrix[r][c] != BLANK) {
+          return false;
+        }
+
+        // Increment the row and column based on the given direction.
+        r += this.deltaRow[direction];
+        c += this.deltaColumn[direction];
+      }
+
+      // The word can be successfully placed.
+      return true;
+    }
+
+    /**
+     * Attempts to place word in the puzzle such that: 1) it doesn't 
+     * overflow any of the puzzle edges and 2) it doesn't conflict with any
+     * already placed words.
+     * 
+     * word - the word to be placed
+     * 
+     * @return
+     */
+    attemptPlaceWord(word) {
+      let remainingTries = this.order * this.order;
+      let row = 0;
+      let col = 0;
+      let usedStartingCells = new Array();
+
+      for (let r = 0; r < this.order; ++r) {
+        usedStartingCells[r] = new Array();
+        for (let c = 0; c < this.order; ++c) {
+          usedStartingCells[r][c] = false;
+        }
+      }
+
+      while (remainingTries-- > 0) {
+        // Pick a row,column pair that hasn't already been used as a
+        // starting cell for a word.
+        do {
+          row = this.pickRow();
+          col = this.pickCol();
+          //alert(row + " " + col);
+        } while (usedStartingCells[row][col]);
+        usedStartingCells[row][col] = true;
+
+        /*
+         * Try each of the 8 possible directions until one is found so that
+         * the word can be placed (or the program fails to place the word in
+         * the current starting position). Obviously, this will favor the low
+         * numbered directions. Another version of the program might try the
+         * directions in random order to eliminate this bias.
+         */
+        for (let direction = 0; direction < 8; ++direction) {
+          if (this.check(word, row, col, direction)) {
+            this.place(word, row, col, direction);
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+
+    /**
+     * Places word in the puzzle starting at the position row, col
+     * and proceeding in direction.
+     *
+     * Assumes that check() has already been called to verify that the
+     * word can be legally placed in the given starting position and direction.
+     *
+     * word = the word to be placed
+     * row = the starting row
+     * col = the starting column
+     * direction = a value from 0-7 indicating the direction to place the
+     *        word.
+     */
+    place(word, row, col, direction) {
+      let r = row;
+      let c = col;
+      for (let i = 0; i < word.length; ++i) {
+        this.matrix[r][c] = word.charAt(i);
+        r += this.deltaRow[direction];
+        c += this.deltaColumn[direction];
+      }
+      // Add word to the list of placed words 
+      this.placedWords.push(new PlacedWord(word, row, col, direction));
+    }
+
+    }
+
+    $(document).ready(
+      function () {
+        $("#create").click(
+          function () {
+            // Retrieve the order number and convert to an int
+            let n = parseInt($("#order").val());
+            // Retrieve the list of words and convert them all to upper case
+            let wds = $("#words").val().toUpperCase();
+            // Split the list up by blanks into separate words.
+            let wordList = wds.split(" ");
+
+            let puzzle = new Puzzle(n, wordList);
+            if (puzzle.createPuzzle()) {
+              puzzle.fillRandom();
+              puzzle.display();
+            } else {
+              alert("Sorry, couldn't create puzzle.")
+            }
+          }
+        )
+      }
+    )
+
+  </script>
+</head>
+
+<body>
+  <form>
+    Enter the size of the puzzle:
+    <input type="text" id="order" size="5" />
+    <br/> Enter a blank separated list of words:
+    <input type="text" id="words" size="100" />
+    <br/>
+    <input type="button" id="create" value="Create Puzzle" />
+  </form>
+  <div id="placeholder"></div>
+</body>
+
+</html>

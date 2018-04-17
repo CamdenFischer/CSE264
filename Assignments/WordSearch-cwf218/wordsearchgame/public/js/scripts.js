@@ -2,6 +2,11 @@ var HOST = "localhost:3000";
 //var HOST = "localhost:3000";
 var SERVER = "http://" + HOST + "/";
 
+//vars for holding which cells have been clicked
+var cells = [];
+var rows = [];
+var columns = [];
+
 // Utility method for encapsulating the jQuery Ajax Call
 function doAjaxCall(method, cmd, params, fcn) {
     $.ajax(
@@ -98,7 +103,7 @@ function generatePuzzle(result){
     for (i = 0; i < result.ncols; i++){
         appendString = "<tr>";
         for (t = 0; t < result.nrows; t++){
-            appendString += "<td>" + result.grid[x] + "</td>";
+            appendString += "<td class='notSelected'>" + result.grid[x] + "</td>";
             x++;
         }
         appendString += "</tr>";
@@ -108,10 +113,6 @@ function generatePuzzle(result){
 
 function setPuzzleTitle(name) {
     $("#puzzlelabel").html(name);
-}
-
-function handleLetterClick(cell){
-
 }
 
 // Attach an event handler to each button on the page
@@ -128,18 +129,46 @@ function attachEventHandlers() {
     });
 
     //function called when letter is clicked
-    $("td").click(function(){
-        var cell = $(this);
-        var row = cell.parent();
-        var col = cell.parents("table").find("td:nth-child(" + (cell.index() + 1) + ")");
+    $('table').on('click', 'td', function() {
+        // Get row and column of the clicked cell
+        var col = $(this).parent().children().index($(this));
+        var row = $(this).parent().parent().children().index($(this).parent());
 
-        console.log("row: " + row + "col: " + col);
-    });
+        // If the clicked cell has not been clicked yet, change class
+        if ($(this).is('.notSelected')) {
+            // Change class of the sell
+            $(this).addClass('selected').removeClass('notSelected');
+
+            // Add cell to list of currently selected cells
+            var cellToPush = {itemCol: col, itemRow: row};
+            cells.push(cellToPush);
+        }
+        // If it has been clicked change it back
+        else if ($(this).is('.selected')){
+            // Change class of the cell
+            $(this).addClass('notSelected').removeClass('selected');
+
+            var index = -1;
+
+            // Get index of item to be deleted
+            for (var i = 0; i < cells.length; i++){
+
+                if (cells[i].itemCol == col && cells[i].itemRow == row){
+                    index = i;
+                }
+            }
+
+            console.log("index to delete: " + index);
+
+            // Remove the item
+            if (index > -1){
+                cells.splice(index, 1);
+            }
+        } 
+        
+        console.log("Number of Cells: " + cells.length);
+    });     
 }
-
-$(function(){
-    
-});
 
 // Run the setup code when the page finishes loading
 $( () => {
