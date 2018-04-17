@@ -2,37 +2,17 @@ var HOST = "localhost:3000";
 //var HOST = "localhost:3000";
 var SERVER = "http://" + HOST + "/";
 
-//vars for holding which cells have been clicked
+// Array of cell objects that have been clicked
 var cells = [];
-var rows = [];
-var columns = [];
 
-// Utility method for encapsulating the jQuery Ajax Call
-function doAjaxCall(method, cmd, params, fcn) {
-    $.ajax(
-            SERVER + cmd,
-            {
-                type: method,
-                processData: true,
-                data: params,
-                dataType: "jsonp",
-                success: function (result) {
-                    fcn(result)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Error: " + jqXHR.responseText);
-                    alert("Error: " + textStatus);
-                    alert("Error: " + errorThrown);
-                }
-            }
-    );
-}
+// Array of players on the leaderboard
+var players = [];
 
+// Stores the players id
 var myid;
 
 // Login user
 function login(loginname) {
-    console.log("Login function called. Username: " + loginname);
     $.ajax(
         "/wordsearch/login",
         {
@@ -44,7 +24,7 @@ function login(loginname) {
             dataType: "json",
             success: function(ret) {
                 myid = ret.id;
-                console.log("AJAX complete. ID: " + myid);
+                console.log("Login AJAX complete. ID: " + myid);
                 getPuzzle();
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -68,8 +48,7 @@ function getPuzzle(){
             },
             dataType: "json",
             success: function(ret) {
-                console.log("GET /puzzle successful");
-                console.log("Theme: " + ret.theme);
+                console.log("GET /puzzle successful. Theme: " + ret.theme);
                 setPuzzleTitle(ret.theme);
                 generatePuzzle(ret);
             },
@@ -83,15 +62,46 @@ function getPuzzle(){
 }
 
 function submitWord(){
+    var letters = {};
     
-    doAjaxCall("GET", "submit", {id: myid},
-    function (result) {
-        if (result.success){
-            
-        } else {
-
+    // Set up letters array to submit each row and column
+    for (var i = 0; i < cells.length; i++) {
+        letters[i] = {r: cells[i].itemRow, c: cells[i].itemCol}; 
+    }
+    $.ajax(
+        "/wordsearch/submit",
+        {
+            type: "GET",
+            processData: true,
+            data: {
+                id: myid,
+                letters: letters
+               },
+            dataType: "json",
+            success: function(ret) {
+                if (ret.success){
+                    console.log("AJAX complete - word found & submitted successfully");
+                    wordFound();
+                    cells = []; //Reset cells after this is processed
+                } else {
+                    window.alert("Not a word");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error: " + jqXHR.responseText);
+                alert("Error: " + textStatus);
+                alert("Error: " + errorThrown);
+            }
         }
-    });
+    );
+    
+}
+
+function wordFound(){
+    for (var i = 0; i < cells.length; i++){
+        var td = cells[i].tdItem;
+        $(td).addClass('locked').removeClass('selected');
+    }
 }
 
 var appendString = "";
@@ -118,13 +128,11 @@ function setPuzzleTitle(name) {
 // Attach an event handler to each button on the page
 function attachEventHandlers() {   
     $("#login").click(function () {
-        console.log("Login button clicked");
         login($("#username").val());
         $("#username").val("");
     });
 
     $("#submit").click(function () {
-        console.log("Submit button clicked");
         submitWord();
     });
 
@@ -140,7 +148,7 @@ function attachEventHandlers() {
             $(this).addClass('selected').removeClass('notSelected');
 
             // Add cell to list of currently selected cells
-            var cellToPush = {itemCol: col, itemRow: row};
+            var cellToPush = {itemCol: col, itemRow: row, tdItem: $(this)};
             cells.push(cellToPush);
         }
         // If it has been clicked change it back
@@ -158,15 +166,11 @@ function attachEventHandlers() {
                 }
             }
 
-            console.log("index to delete: " + index);
-
             // Remove the item
             if (index > -1){
                 cells.splice(index, 1);
             }
-        } 
-        
-        console.log("Number of Cells: " + cells.length);
+        }
     });     
 }
 
@@ -176,12 +180,19 @@ $( () => {
     attachEventHandlers();
     var socket = io.connect(HOST);
 
-    //
-    socket.on('players', function() {
-
+    // Returns {name, score, winner}
+    socket.on('players', function(ret) {
+        players = [];
+        ret.forEach((name, score, winner) => {
+            var name = ret.name;
+            var score = ret.score;
+            var winner = ret.winner;
+            players.push({name: name, score: score, winner: winner});
+        });
+        
     });
 
-    //
+    // Returns claimed words & letters
     socket.on('gridupdates', function() {
 
     });

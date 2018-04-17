@@ -21,3 +21,8 @@ tr {
 .notSelected {
     background-color: white;
 }
+
+.locked {
+    background-color: black;
+    color: white;
+}
