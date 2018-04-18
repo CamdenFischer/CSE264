@@ -1,15 +1,27 @@
-table {
+form {
+    width: 100%;
+}
+
+#puzzle {
     width: 75%;
     vertical-align: middle;
     background-color: black;
+    float: left;
+    overflow: scroll;
 }
 
-td {
+#leaderboard {
+    width: 25%;
+    float: right;
+    border: 1px solid black;
+}
+
+#puzzle td {
     margin: 5px;
     text-align: center;
 }
 
-tr {
+#puzzle tr {
     margin: 5px;
     height: 5px;
 }
@@ -25,4 +37,12 @@ tr {
 .locked {
     background-color: black;
     color: white;
+}
+
+.winner {
+    background-color: yellow;
+}
+
+.notWinner {
+    background-color: white;
 }
